@@ -1,7 +1,41 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import { db } from "../../config/firebaseConfig";
+import { collection, query, where, getDocs } from "firebase/firestore";
+
 import "./CategoryArticle.css";
 
 const CategoryArticle = () => {
-  return <div>CategoryArticle</div>;
+  const { categoryName } = useParams();
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    // create reference to firebase db collection / firestore
+    const articleRef = collection(db, "Articles");
+
+    // now create query
+    const q = query(articleRef, where("category", "==", categoryName));
+
+    // now get data that matches the query
+    getDocs(q, articleRef).then((res) => {
+      const articles = res.docs.map((item) => ({
+        ...item.data(),
+        id: item.id,
+      }));
+      // console.log(articles);
+      setArticles(articles);
+    })
+    .catch((err)=>console.log(err))
+  }, [categoryName]); // dependency array, so it only runs once at load
+
+  return (
+    <div>
+      {articles.map((item) => (
+        <h2>{item.title}</h2>
+      ))}
+    </div>
+  );
 };
 
 export default CategoryArticle;
