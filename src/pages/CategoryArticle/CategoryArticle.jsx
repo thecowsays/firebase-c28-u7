@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { db } from "../../config/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
+import ArticleCard from "../../components/ArticleCard/ArticleCard";
+
 import "./CategoryArticle.css";
 
 const CategoryArticle = () => {
@@ -18,21 +20,22 @@ const CategoryArticle = () => {
     const q = query(articleRef, where("category", "==", categoryName));
 
     // now get data that matches the query
-    getDocs(q, articleRef).then((res) => {
-      const articles = res.docs.map((item) => ({
-        ...item.data(),
-        id: item.id,
-      }));
-      // console.log(articles);
-      setArticles(articles);
-    })
-    .catch((err)=>console.log(err))
+    getDocs(q, articleRef)
+      .then((res) => {
+        const articles = res.docs.map((item) => ({
+          ...item.data(),
+          id: item.id,
+        }));
+        // console.log(articles);
+        setArticles(articles);
+      })
+      .catch((err) => console.log(err));
   }, [categoryName]); // dependency array, so it only runs once at load
 
   return (
-    <div>
+    <div className="category-articles">
       {articles.map((item) => (
-        <h2>{item.title}</h2>
+        <ArticleCard article={item} key={item.index} />
       ))}
     </div>
   );

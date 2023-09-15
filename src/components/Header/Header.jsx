@@ -1,13 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../config/firebaseConfig";
 
 import "./Header.css";
+import { signOut } from "firebase/auth";
 
 const Header = () => {
   const categories = ["Health", "Food", "Travel", "Technology"];
 
   const navigate = useNavigate();
+
+  // get user data
+  const [user] = useAuthState(auth);
 
   return (
     <div className="header-container">
@@ -19,6 +25,19 @@ const Header = () => {
           </Link>
         ))}
       </div>
+
+      {user ? (
+        <div>
+          <span className="username">{user?.displayName}</span>
+          <button className="auth-link" onClick={() => signOut(auth)}>
+            Logout
+          </button>
+        </div>
+      ) : (
+        <Link to="/auth" className="auth-link">
+          Signup
+        </Link>
+      )}
     </div>
   );
 };
