@@ -42,21 +42,21 @@ function AddArticle() {
             // use addDoc to add the article
             addDoc(articleRef, {
               title: formData.title,
-              summary: formData.title,
-              paragraghOne: formData.paragraghOne,
-              paragraghTwo: formData.paragraghTwo,
-              paragraghThree: formData.paragraghThree,
+              summary: formData.summary,
+              paragraphOne: formData.paragraphOne,
+              paragraphTwo: formData.paragraphTwo,
+              paragraphThree: formData.paragraphThree,
               category: formData.category,
               imageUrl: url,
-              createdBy: user?.displayName,
+              writtenBy: user?.displayName,
               userId: user?.uid,
-              createdAt: Timestamp.now().toDate(),
+              written: Timestamp.now().toDate(),
             }).catch((err) => console.log(err));
           })
           .then((res) => {
             // give feedback to the user that they've successfully added an article
             toast("Article saved successfully", {
-              type: "info",
+              type: "success",
               autoClose: 1500,
             });
             // pause before navigating the user to the homepage
@@ -103,7 +103,7 @@ function AddArticle() {
             placeholder="Maximum 650 characters"
             maxLength="650"
             onChange={(e) =>
-              setFormData({ ...formData, paragraghOne: e.target.value })
+              setFormData({ ...formData, paragraphOne: e.target.value })
             }
           />
         </div>
@@ -114,7 +114,7 @@ function AddArticle() {
             placeholder="Maximum 650 characters"
             maxLength="650"
             onChange={(e) =>
-              setFormData({ ...formData, paragraghTwo: e.target.value })
+              setFormData({ ...formData, paragraphTwo: e.target.value })
             }
           />
         </div>
@@ -125,7 +125,7 @@ function AddArticle() {
             placeholder="Maximum 650 characters"
             maxLength="650"
             onChange={(e) =>
-              setFormData({ ...formData, paragraghThree: e.target.value })
+              setFormData({ ...formData, paragraphThree: e.target.value })
             }
           />
         </div>
